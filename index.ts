@@ -1,9 +1,13 @@
 import { Hono } from "hono";
 import { upload } from "./src/upload";
 import { randomId } from "./src/utils";
-
+import { serveStatic } from '@hono/node-server/serve-static'
 const cdn = new Hono();
 const fileMap = new Map<string, string>();
+
+cdn.use('/static/*', serveStatic({ root: './public' }))
+cdn.get('/', serveStatic({ path: './public/index.html' }))
+
 
 cdn.post("/upload", async (c) => {
   const formData = await c.req.formData();

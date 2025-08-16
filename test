@@ -1,0 +1,25 @@
+import axios from "axios";
+import FormData from "form-data";
+
+async function uploadBuffer(buff: Buffer, fileName = "file.dat") {
+  const formData = new FormData();
+  formData.append("file", buff, fileName);
+
+  try {
+    const res = await axios.post("https://cdn-haki.zone.id/upload", formData, {
+      headers: formData.getHeaders(),
+    });
+
+    console.log("Server response:", res.data);
+    return res.data.url;
+  } catch (err: any) {
+    console.error("Upload error:", err.response?.data || err.message);
+    return null;
+  }
+}
+
+
+const buffer = Buffer.from("Hello world!"); 
+uploadBuffer(buffer, "hello.txt").then((url) => {
+  console.log("File URL:", url);
+});
