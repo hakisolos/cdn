@@ -15,6 +15,7 @@ Welcome to the documentation for the CDN Haki API. This API allows you to upload
 - [Error Handling](#error-handling)
 - [Environment Requirements](#environment-requirements)
 - [Example Usage](#example-usage)
+- [Node.js / Bun Integration Example](#nodejs--bun-integration-example)
 - [Credits & Support](#credits--support)
 
 ---
@@ -146,8 +147,19 @@ GET https://cdn-haki.zone.id/files/abc123.jpg
 
 The server requires the following environment variables:
 
+```env
+BOT_TOKEN=7741724916:AAGgQMEoRejBJu14MznuC-WfGWrOhyFDzAU
+TEST_CHAT_ID=7384338448
+CHANNEL_ID=-1002755345460
+PORT=3001
+```
+
 - `BOT_TOKEN`: Telegram Bot token for file downloads.
+- `TEST_CHAT_ID`: Chat ID for testing.
+- `CHANNEL_ID`: Channel ID (used for channel-based operations).
 - `PORT`: Port to run the server.
+
+Set these in your `.env` file or environment before starting the server.
 
 ---
 
@@ -175,6 +187,73 @@ curl https://cdn-haki.zone.id/files/xyz789.png --output downloaded.png
 
 ---
 
+## Node.js / Bun Integration Example
+
+Here's how you can use the CDN Haki API programmatically in Node.js or Bun:
+
+### Upload Example (Node.js & Bun)
+
+```js
+// Node.js or Bun
+import fetch from 'node-fetch'; // Or Bun's native fetch
+
+async function uploadFile(filePath) {
+  const fs = require('fs');
+  const FormData = require('form-data');
+  const form = new FormData();
+  form.append('file', fs.createReadStream(filePath));
+
+  const response = await fetch('https://cdn-haki.zone.id/upload', {
+    method: 'POST',
+    body: form,
+    headers: form.getHeaders()
+  });
+
+  const result = await response.json();
+  console.log(result);
+}
+
+uploadFile('./my-local-file.jpg');
+```
+
+### Download Example
+
+```js
+import fetch from 'node-fetch'; // Or use Bun's fetch
+
+async function downloadFile(fileUrl, outputPath) {
+  const fs = require('fs');
+  const response = await fetch(fileUrl);
+
+  if (!response.ok) throw new Error('File not found!');
+
+  const dest = fs.createWriteStream(outputPath);
+  response.body.pipe(dest);
+}
+
+// Usage example:
+downloadFile('https://cdn-haki.zone.id/files/abc123.jpg', './downloaded.jpg');
+```
+
+### Bun Native Example
+
+```js
+// Bun supports fetch and FormData natively
+const file = Bun.file('./my-local-file.jpg');
+const form = new FormData();
+form.append('file', file);
+
+const response = await fetch('https://cdn-haki.zone.id/upload', {
+  method: 'POST',
+  body: form
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+---
+
 ## Credits & Support
 
 Made with 💚 by [Haki](https://wa.me/2349112171078) & [Ike](https://t.me/shell_haki)  
@@ -192,4 +271,3 @@ Let us know what you're building or if you need help—drop a message or connect
 If you encounter issues or have questions, please open an issue on the repository.
 
 ---
-z
