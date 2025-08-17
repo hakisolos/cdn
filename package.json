@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^1.11.0",
+    "cdn": ".",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
