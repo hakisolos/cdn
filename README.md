@@ -180,12 +180,6 @@ Response:
 }
 ```
 
-### Download the File
-
-```sh
-curl https://cdn-haki.zone.id/files/xyz789.png --output downloaded.png
-```
-
 ---
 
 ## Node.js / Bun Integration Example
@@ -217,49 +211,18 @@ async function uploadFile(filePath) {
 uploadFile('./my-local-file.jpg');
 ```
 
-### Download Example
-
-```js
-import fetch from 'node-fetch'; // Or use Bun's fetch
-
-async function downloadFile(fileUrl, outputPath) {
-  const fs = require('fs');
-  const response = await fetch(fileUrl);
-
-  if (!response.ok) throw new Error('File not found!');
-
-  const dest = fs.createWriteStream(outputPath);
-  response.body.pipe(dest);
-}
-
-// Usage example:
-downloadFile('https://cdn-haki.zone.id/files/abc123.jpg', './downloaded.jpg');
-```
-
-### Bun Native Example
-
-```js
-// Bun supports fetch and FormData natively
-const file = Bun.file('./my-local-file.jpg');
-const form = new FormData();
-form.append('file', file);
-
-const response = await fetch('https://cdn-haki.zone.id/upload', {
-  method: 'POST',
-  body: form
-});
-
-const data = await response.json();
-console.log(data);
-```
-
 ---
 
 ## How to Deploy Your Own Instance
 
+**This section is for developers who want to deploy the source code for themselves.  
+If you just want to use the hosted API, skip this section and use the endpoints above!**
+
+If you deploy your own instance, please credit the original project and author (see Credits & Support below).
+
 You can run CDN Haki on your own server, VPS, or cloud platform using either Node.js or Bun. Here’s how:
 
-### 1. Deploying on Vercel (Node.js)
+### Deploying on Vercel (Node.js)
 
 - **Step 1:** Fork or clone the repository.
 - **Step 2:** Add your environment variables in Vercel dashboard (`BOT_TOKEN`, `TEST_CHAT_ID`, `CHANNEL_ID`, `PORT`).
@@ -268,14 +231,14 @@ You can run CDN Haki on your own server, VPS, or cloud platform using either Nod
 
 > Note: Vercel may not support Bun natively yet, so use Node.js for Vercel.
 
-### 2. Deploying on Render
+### Deploying on Render
 
 - **Step 1:** Fork or clone the repository.
 - **Step 2:** Create a new web service on Render with your repo.
 - **Step 3:** Set the environment variables in the Render dashboard.
 - **Step 4:** Select Node.js or Bun as your environment and deploy.
 
-### 3. Deploying on VPS (Node.js/Bun)
+### Deploying on VPS (Node.js/Bun)
 
 - **Step 1:** SSH into your VPS.
 - **Step 2:** Clone the repo:  
@@ -288,7 +251,7 @@ You can run CDN Haki on your own server, VPS, or cloud platform using either Nod
   - Node.js: `node index.js` or `npm start`
   - Bun: `bun index.ts`
 
-### 4. Local .env Setup
+### Local .env Setup
 
 Create a `.env` file in the root of your project with the following contents:
 
@@ -301,7 +264,7 @@ PORT=your-port
 
 > **Note:** Keep your bot token secret!
 
-### 5. Bun vs Node
+### Bun vs Node
 
 - **Node.js:** Use `npm install` and `node index.js`
 - **Bun:** Use `bun install` and `bun index.ts`
@@ -311,15 +274,16 @@ PORT=your-port
 
 ## Credits & Support
 
-Made with 💚 by [Haki](https://wa.me/2349112171078) & [Ike](https://t.me/shell_haki)  
-If you love this project, support, star, and follow us for more cool stuff!
+Made with 💚 by [Haki](https://wa.me/2349112171078)
+
+If you love this project, support, star, and follow for more cool stuff!  
+If you need a custom frontend for your deployment, chat me on WhatsApp ([wa.me/2349112171078](https://wa.me/2349112171078)) and I’ll make one for you.
 
 - **WhatsApp:** [wa.me/2349112171078](https://wa.me/2349112171078)
-- **Telegram:** [t.me/shell_haki](https://t.me/shell_haki)
 - **X (Twitter):** [@haki_xer](https://x.com/haki_xer)
 
 Your feedback, stars, and support mean a lot.  
-Let us know what you're building or if you need help—drop a message or connect on socials!
+Let me know what you're building or if you need help—drop a message or connect on socials!
 
 ---
 
