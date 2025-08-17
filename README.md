@@ -1,152 +1,89 @@
-# CDN Haki API Documentation
+# CDN Haki – Node.js Developer Documentation
 
-Welcome to the documentation for the CDN Haki API. This API allows you to upload files, retrieve files using unique URLs, and serve static files. The service is hosted at:  
-**`https://cdn-haki.zone.id`**
+Welcome to the developer docs for the Node.js version of CDN Haki!  
+This branch (`nodejs-support`) is focused on Node.js compatibility and deployment for developer platforms.  
+You can easily deploy, extend, or integrate this CDN backend for your own apps, websites, or automation.
 
 ---
 
 ## Table of Contents
 
-- [Base URL](#base-url)
-- [Static File Serving](#static-file-serving)
-- [Upload File](#upload-file)
-- [Retrieve Uploaded File](#retrieve-uploaded-file)
-- [Response Formats](#response-formats)
-- [Error Handling](#error-handling)
-- [Environment Requirements](#environment-requirements)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [API Endpoints](#api-endpoints)
+- [Environment Variables](#environment-variables)
 - [Example Usage](#example-usage)
-- [Node.js / Bun Integration Example](#nodejs--bun-integration-example)
-- [How to Deploy Your Own Instance](#how-to-deploy-your-own-instance)
+- [Deploying Your Own Instance](#deploying-your-own-instance)
+  - [Vercel](#vercel)
+  - [Render](#render)
+  - [Heroku](#heroku)
+  - [VPS/Cloud](#vpscloud)
+- [Make Your Own Frontend](#make-your-own-frontend)
 - [Credits & Support](#credits--support)
 
 ---
 
-## Base URL
+## Features
 
-All endpoints are served from:
+- Upload files via `/upload` (multipart/form-data)
+- Get files via `/files/:id`
+- Serve static assets from `/static/*` and index page (`/`)
+- Files are stored/retrieved via Telegram CDN (using your bot token)
+- Fast, simple, and cache-friendly responses
 
+---
+
+## Getting Started
+
+### 1. Fork & Star the Repo!
+
+- Click **Fork** and **Star** to support the project.
+- Select the `nodejs-support` branch as default if you want easy Node.js deployment (recommended for Vercel/Heroku/most platforms).
+
+### 2. Clone Your Fork
+
+```sh
+git clone https://github.com/<your-username>/cdn.git
+cd cdn
+git checkout nodejs-support
 ```
-https://cdn-haki.zone.id
+
+### 3. Install Dependencies
+
+```sh
+npm install
 ```
 
 ---
 
-## Static File Serving
+## API Endpoints
 
-### Serve Static Assets
+### Upload File
 
-- **Endpoint:**  
-  `GET /static/*`
+- **POST** `/upload`
+- **Body:** FormData, key: `file`
+- **Returns:** `{ url, fileSize }`
 
-- **Description:**  
-  Serves static files located in the local `./public` directory.
+### Get Uploaded File
 
-- **Example:**  
-  To access a static file located at `./public/example.png`, request:
-  ```
-  GET https://cdn-haki.zone.id/static/example.png
-  ```
+- **GET** `/files/:id`
+- Serves file from Telegram CDN with cache headers.
+
+### Serve Static Files
+
+- **GET** `/static/<filename>`
+- Serves files from `./public` directory.
 
 ### Serve Index Page
 
-- **Endpoint:**  
-  `GET /`
-
-- **Description:**  
-  Serves the index page (`./public/index.html`).
+- **GET** `/`
+- Serves `./public/index.html`
 
 ---
 
-## Upload File
+## Environment Variables
 
-### Endpoint
-
-```
-POST /upload
-```
-
-### Description
-
-Uploads a file to the CDN. The server generates a unique ID for each uploaded file and returns a shareable URL.
-
-### Request
-
-- **Content-Type:** `multipart/form-data`
-- **Body:**  
-  - `file`: The file to upload.
-
-#### Example using `curl`
-
-```sh
-curl -X POST https://cdn-haki.zone.id/upload \
-  -F "file=@yourfile.jpg"
-```
-
-### Successful Response
-
-```json
-{
-  "url": "https://cdn-haki.zone.id/files/{unique_id}",
-  "fileSize": 12345
-}
-```
-- `url`: The URL to access the file.
-- `fileSize`: The size of the uploaded file in bytes.
-
----
-
-## Retrieve Uploaded File
-
-### Endpoint
-
-```
-GET /files/:id
-```
-
-- `:id` is the unique file identifier returned from the upload endpoint.
-
-### Description
-
-Retrieves the uploaded file. Files are served directly from Telegram's CDN via the Telegram Bot API.
-
-### Example
-
-```
-GET https://cdn-haki.zone.id/files/abc123.jpg
-```
-
-- Returns the file with appropriate `Content-Type`.
-- Response includes caching headers (`Cache-Control: public, max-age=31536000`).
-
----
-
-## Response Formats
-
-- **Success:**  
-  - Upload: JSON object with file URL and size.
-  - Retrieve: Binary file stream with proper content type.
-- **Errors:**  
-  - JSON objects with error messages and HTTP status codes.
-
-#### Error Response Example
-
-```json
-{ "error": "no file uploaded" }
-```
-
----
-
-## Error Handling
-
-- **401 Unauthorized:** No file provided in upload.
-- **404 Not Found:** File with given ID does not exist or not found on Telegram CDN.
-- **500 Internal Server Error:** Upload failed.
-
----
-
-## Environment Requirements
-
-The server requires the following environment variables:
+Create a `.env` file in the root directory and set:
 
 ```env
 BOT_TOKEN=7741724916:AAGgQMEoRejBJu14MznuC-WfGWrOhyFDzAU
@@ -155,24 +92,24 @@ CHANNEL_ID=-1002755345460
 PORT=3001
 ```
 
-- `BOT_TOKEN`: Telegram Bot token for file downloads.
-- `TEST_CHAT_ID`: Chat ID for testing.
-- `CHANNEL_ID`: Channel ID (used for channel-based operations).
-- `PORT`: Port to run the server.
+- **BOT_TOKEN:** Telegram bot token for uploads/downloads
+- **TEST_CHAT_ID:** Chat ID (for testing with bot)
+- **CHANNEL_ID:** Channel ID (used for file storage)
+- **PORT:** Server port (default: 3001)
 
-Set these in your `.env` file or environment before starting the server.
+**Note:** Keep your bot token secret!
 
 ---
 
 ## Example Usage
 
-### Upload a File
+### Upload a File (cURL)
 
 ```sh
 curl -X POST https://cdn-haki.zone.id/upload -F "file=@yourfile.png"
 ```
 
-Response:
+**Response:**
 ```json
 {
   "url": "https://cdn-haki.zone.id/files/xyz789.png",
@@ -186,126 +123,101 @@ Response:
 curl https://cdn-haki.zone.id/files/xyz789.png --output downloaded.png
 ```
 
----
-
-## Node.js / Bun Integration Example
-
-Here's how you can use the CDN Haki API programmatically in Node.js or Bun:
-
-### Upload Example (Node.js & Bun)
+### Node.js Integration Example
 
 ```js
-// Node.js or Bun
-import fetch from 'node-fetch'; // Or Bun's native fetch
+import fetch from 'node-fetch';
+const fs = require('fs');
+const FormData = require('form-data');
 
 async function uploadFile(filePath) {
-  const fs = require('fs');
-  const FormData = require('form-data');
   const form = new FormData();
   form.append('file', fs.createReadStream(filePath));
-
   const response = await fetch('https://cdn-haki.zone.id/upload', {
     method: 'POST',
     body: form,
     headers: form.getHeaders()
   });
-
-  const result = await response.json();
-  console.log(result);
+  console.log(await response.json());
 }
 
 uploadFile('./my-local-file.jpg');
 ```
 
-### Download Example
+---
 
-```js
-import fetch from 'node-fetch'; // Or use Bun's fetch
+## Deploying Your Own Instance
 
-async function downloadFile(fileUrl, outputPath) {
-  const fs = require('fs');
-  const response = await fetch(fileUrl);
+You can deploy CDN Haki Node.js to any cloud/server, including **Vercel, Render, Heroku, VPS, etc.**
 
-  if (!response.ok) throw new Error('File not found!');
+### Vercel
 
-  const dest = fs.createWriteStream(outputPath);
-  response.body.pipe(dest);
+**Recommended for Node.js!**
+
+1. **Fork & star the repo.**
+2. **Set `nodejs-support` branch as default** in repo settings.
+3. **Import your repo to Vercel.**
+4. **Add environment variables (`BOT_TOKEN`, etc) in Vercel dashboard.**
+5. **Add a `vercel.json` file:**
+
+```json name=vercel.json
+{
+  "version": 2,
+  "builds": [
+    { "src": "index.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/index.js" }
+  ]
 }
-
-// Usage example:
-downloadFile('https://cdn-haki.zone.id/files/abc123.jpg', './downloaded.jpg');
 ```
 
-### Bun Native Example
+6. **Deploy and test your instance!**
 
-```js
-// Bun supports fetch and FormData natively
-const file = Bun.file('./my-local-file.jpg');
-const form = new FormData();
-form.append('file', file);
-
-const response = await fetch('https://cdn-haki.zone.id/upload', {
-  method: 'POST',
-  body: form
-});
-
-const data = await response.json();
-console.log(data);
-```
+> If you want a custom frontend, you can build your own and point it to your API.  
+> Need a frontend? DM me on WhatsApp ([wa.me/2349112171078](https://wa.me/2349112171078)) and I’ll make one for you!
 
 ---
 
-## How to Deploy Your Own Instance
+### Render
 
-You can run CDN Haki on your own server, VPS, or cloud platform using either Node.js or Bun. Here’s how:
+1. Fork & star the repo.
+2. Connect your repo on Render, select Node.js environment.
+3. Add your environment variables (`BOT_TOKEN`, etc) in Render dashboard.
+4. Deploy!
 
-### 1. Deploying on Vercel (Node.js)
+---
 
-- **Step 1:** Fork or clone the repository.
-- **Step 2:** Add your environment variables in Vercel dashboard (`BOT_TOKEN`, `TEST_CHAT_ID`, `CHANNEL_ID`, `PORT`).
-- **Step 3:** Set up a `vercel.json` or use the default configuration.
-- **Step 4:** Deploy!
+### Heroku
 
-> Note: Vercel may not support Bun natively yet, so use Node.js for Vercel.
+1. Fork & star the repo.
+2. Login to Heroku, create a new Node.js app.
+3. Connect your GitHub repo.
+4. Set your environment variables.
+5. Deploy!
 
-### 2. Deploying on Render
+---
 
-- **Step 1:** Fork or clone the repository.
-- **Step 2:** Create a new web service on Render with your repo.
-- **Step 3:** Set the environment variables in the Render dashboard.
-- **Step 4:** Select Node.js or Bun as your environment and deploy.
+### VPS/Cloud
 
-### 3. Deploying on VPS (Node.js/Bun)
+1. SSH into your VPS/cloud server.
+2. Clone your fork:  
+   `git clone https://github.com/<your-username>/cdn.git`
+3. Checkout `nodejs-support` branch.
+4. Install dependencies:  
+   `npm install`
+5. Create `.env` file with your variables.
+6. Start server:  
+   `node index.js` or `npm start`
 
-- **Step 1:** SSH into your VPS.
-- **Step 2:** Clone the repo:  
-  `git clone https://github.com/hakisolos/cdn.git`
-- **Step 3:** Install dependencies:
-  - Node.js: `npm install`
-  - Bun: `bun install`
-- **Step 4:** Set your environment variables (see above).
-- **Step 5:** Start the server:
-  - Node.js: `node index.js` or `npm start`
-  - Bun: `bun index.ts`
+---
 
-### 4. Local .env Setup
+## Make Your Own Frontend
 
-Create a `.env` file in the root of your project with the following contents:
+You can make your own UI or frontend to interact with the API.  
+Just point your frontend to your API server endpoints.
 
-```env
-BOT_TOKEN=your-telegram-bot-token
-TEST_CHAT_ID=your-test-chat-id
-CHANNEL_ID=your-channel-id
-PORT=your-port
-```
-
-> **Note:** Keep your bot token secret!
-
-### 5. Bun vs Node
-
-- **Node.js:** Use `npm install` and `node index.js`
-- **Bun:** Use `bun install` and `bun index.ts`
-- The project supports both, but Bun is faster!
+If you want a custom frontend, DM me on WhatsApp ([wa.me/2349112171078](https://wa.me/2349112171078)) and I’ll build it for you!
 
 ---
 
@@ -324,5 +236,3 @@ Let us know what you're building or if you need help—drop a message or connect
 ---
 
 If you encounter issues or have questions, please open an issue on the repository.
-
----
