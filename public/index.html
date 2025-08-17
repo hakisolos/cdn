@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en" class="h-full dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,157 +25,280 @@
   <style>
     /* Smooth transitions */
     * { transition: background-color .2s ease, color .2s ease, border-color .2s ease; }
+    
+    /* Code syntax highlighting */
+    .code-block {
+      background: rgb(17, 24, 39);
+      border: 1px solid rgb(55, 65, 81);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      overflow-x: auto;
+    }
+    .code-block code {
+      color: rgb(229, 231, 235);
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+    .code-json { color: rgb(34, 197, 94); }
+    .code-string { color: rgb(34, 197, 94); }
+    .code-number { color: rgb(251, 191, 36); }
+    .code-keyword { color: rgb(168, 85, 247); }
+    .code-comment { color: rgb(107, 114, 128); font-style: italic; }
   </style>
 </head>
-<body class="h-full bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+<body class="h-full bg-gray-950 text-gray-100">
   <!-- App Shell -->
   <div class="min-h-screen flex flex-col">
     <!-- Header -->
-    <header class="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-gray-900/60 border-b border-gray-200/70 dark:border-gray-800">
+    <header class="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-gray-900/60 border-b border-gray-800">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 py-3 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <div class="h-8 w-8 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-700"></div>
-          <div class="font-black tracking-tight text-lg">Haki <span class="text-brand-600 dark:text-brand-400">CDN</span></div>
+          <div class="font-black tracking-tight text-lg">Haki <span class="text-brand-400">CDN</span></div>
         </div>
         <div class="flex items-center gap-2">
-          <button id="themeToggle" class="inline-flex items-center gap-2 rounded-2xl border border-gray-200 dark:border-gray-800 px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-900">
-            <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4"><path fill="currentColor" d="M12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10m0 8a3 3 0 1 1 0-6a3 3 0 0 1 0 6m0-11a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1m0 16a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1M4 11a1 1 0 0 1 1 1a1 1 0 1 1-2 0a1 1 0 0 1 1-1m16 0a1 1 0 0 1 1 1a1 1 0 1 1-2 0a1 1 0 0 1 1-1M6.22 6.22a1 1 0 0 1 1.41 0l.71.71a1 1 0 1 1-1.42 1.41l-.7-.7a1 1 0 0 1 0-1.42m9.9 9.9a1 1 0 0 1 1.41 0l.71.71a1 1 0 1 1-1.42 1.41l-.7-.7a1 1 0 0 1 0-1.42M17.78 6.22a1 1 0 0 1 0 1.41l-.71.71a1 1 0 1 1-1.41-1.42l.7-.7a1 1 0 0 1 1.42 0M7.88 16.12a1 1 0 0 1 0 1.41l-.71.71a1 1 0 1 1-1.41-1.42l.7-.7a1 1 0 0 1 1.42 0"/></svg>
-            <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4 hidden"><path fill="currentColor" d="M12.1 2.1a1 1 0 0 1 .8 1.2a6 6 0 1 0 7.8 7.8a1 1 0 0 1 1.6 1.1A8 8 0 1 1 12.1 2.1z"/></svg>
-            <span id="themeText">Dark</span>
+          <button id="docsBtn" class="inline-flex items-center gap-2 rounded-2xl border border-gray-800 px-3 py-1.5 text-sm hover:bg-gray-900">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 8V2l6 6z"/></svg>
+            Docs
           </button>
-          <a href="#uploads" class="rounded-2xl border border-gray-200 dark:border-gray-800 px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-900">Uploads</a>
+          <a href="#uploads" class="rounded-2xl border border-gray-800 px-3 py-1.5 text-sm hover:bg-gray-900">Uploads</a>
         </div>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1">
-      <section class="mx-auto max-w-6xl px-4 sm:px-6 py-10">
-        <!-- Hero -->
-        <div class="grid md:grid-cols-2 gap-6 items-center mb-8">
-          <div>
-            <h1 class="text-3xl sm:text-4xl font-black tracking-tight">Frictionless Media Delivery</h1>
-            <p class="mt-3 text-gray-600 dark:text-gray-300">Upload any media and get an instant CDN URL you can share. Fast, reliable, and built for performance.</p>
-            <ul class="mt-4 text-sm text-gray-600 dark:text-gray-400 list-disc pl-5 space-y-1">
-              <li>Drag & drop or click to select multiple files</li>
-              <li>Real-time upload progress with cancel option</li>
-              <li>Copy URL with one click</li>
-            </ul>
-          </div>
-          <div class="relative">
-            <div class="absolute inset-0 -z-10 blur-3xl opacity-40 bg-gradient-to-tr from-brand-500/40 to-fuchsia-500/30 rounded-3xl"></div>
-            <!-- Dropzone Card -->
-            <div id="dropzone" class="rounded-3xl border border-dashed border-gray-300 dark:border-gray-700 p-8 bg-white/60 dark:bg-gray-900/40 backdrop-blur hover:border-brand-400 dark:hover:border-brand-500 transition cursor-pointer">
-              <div class="flex flex-col items-center text-center">
-                <div class="h-14 w-14 rounded-full bg-brand-500/10 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-7 w-7 text-brand-600 dark:text-brand-400"><path fill="currentColor" d="M13 5.83V16a1 1 0 1 1-2 0V5.83L8.41 8.41a1 1 0 1 1-1.41-1.41l4-4a1 1 0 0 1 1.41 0l4 4a1 1 0 0 1-1.41 1.41zM4 14a1 1 0 0 1 1 1v3h14v-3a1 1 0 1 1 2 0v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-4a1 1 0 0 1 2 0v3h2v-3a1 1 0 0 1 1-1"/></svg>
-                </div>
-                <h3 class="mt-4 font-semibold">Drop files here</h3>
-                <p class="text-sm text-gray-600 dark:text-gray-400">Images, videos, audio, docs — any file type supported.</p>
-                <div class="mt-5 flex items-center gap-3">
-                  <button id="browseBtn" class="rounded-xl bg-brand-600 text-white px-4 py-2 text-sm font-semibold hover:bg-brand-700 shadow">Browse files</button>
-                  <input id="fileInput" type="file" class="hidden" multiple />
-                  <span class="text-xs text-gray-500">…or drag & drop</span>
+    <main class="flex-1" id="mainContent">
+      <!-- Home Page -->
+      <div id="homePage">
+        <section class="mx-auto max-w-6xl px-4 sm:px-6 py-10">
+          <!-- Hero -->
+          <div class="grid md:grid-cols-2 gap-6 items-center mb-8">
+            <div>
+              <h1 class="text-3xl sm:text-4xl font-black tracking-tight">Frictionless Media Delivery</h1>
+              <p class="mt-3 text-gray-300">Upload any media and get an instant CDN URL you can share. Fast, reliable, and built for performance.</p>
+              <ul class="mt-4 text-sm text-gray-400 list-disc pl-5 space-y-1">
+                <li>Drag & drop or click to select multiple files</li>
+                <li>Real-time upload progress with cancel option</li>
+                <li>Copy URL with one click</li>
+              </ul>
+            </div>
+            <div class="relative">
+              <div class="absolute inset-0 -z-10 blur-3xl opacity-40 bg-gradient-to-tr from-brand-500/40 to-fuchsia-500/30 rounded-3xl"></div>
+              <!-- Dropzone Card -->
+              <div id="dropzone" class="rounded-3xl border border-dashed border-gray-700 p-8 bg-gray-900/40 backdrop-blur hover:border-brand-500 transition cursor-pointer">
+                <div class="flex flex-col items-center text-center">
+                  <div class="h-14 w-14 rounded-full bg-brand-500/10 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-7 w-7 text-brand-400"><path fill="currentColor" d="M13 5.83V16a1 1 0 1 1-2 0V5.83L8.41 8.41a1 1 0 1 1-1.41-1.41l4-4a1 1 0 0 1 1.41 0l4 4a1 1 0 0 1-1.41 1.41zM4 14a1 1 0 0 1 1 1v3h14v-3a1 1 0 1 1 2 0v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-4a1 1 0 0 1 2 0v3h2v-3a1 1 0 0 1 1-1"/></svg>
+                  </div>
+                  <h3 class="mt-4 font-semibold">Drop files here</h3>
+                  <p class="text-sm text-gray-400">Images, videos, audio, docs — any file type supported.</p>
+                  <div class="mt-5 flex items-center gap-3">
+                    <button id="browseBtn" class="rounded-xl bg-brand-600 text-white px-4 py-2 text-sm font-semibold hover:bg-brand-700 shadow">Browse files</button>
+                    <input id="fileInput" type="file" class="hidden" multiple />
+                    <span class="text-xs text-gray-500">…or drag & drop</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Uploads List -->
-        <div id="uploads" class="mt-10">
-          <div class="flex items-center justify-between mb-3">
-            <h2 class="text-xl font-bold">Recent Uploads</h2>
-            <button id="clearAll" class="text-sm px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900">Clear all</button>
+          <!-- Uploads List -->
+          <div id="uploads" class="mt-10">
+            <div class="flex items-center justify-between mb-3">
+              <h2 class="text-xl font-bold">Recent Uploads</h2>
+              <button id="clearAll" class="text-sm px-3 py-1.5 rounded-xl border border-gray-800 hover:bg-gray-900">Clear all</button>
+            </div>
+            <div id="list" class="grid gap-3"></div>
           </div>
-          <div id="list" class="grid gap-3"></div>
-        </div>
-      </section>
+        </section>
+      </div>
+
+      <!-- Docs Page -->
+      <div id="docsPage" class="hidden">
+        <section class="mx-auto max-w-4xl px-4 sm:px-6 py-10">
+          <div class="flex items-center gap-3 mb-8">
+            <button id="backBtn" class="inline-flex items-center gap-2 rounded-2xl border border-gray-800 px-3 py-1.5 text-sm hover:bg-gray-900 transition">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4"><path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20v-2z"/></svg>
+              Back to Home
+            </button>
+          </div>
+
+          <div class="space-y-8">
+            <div>
+              <h1 class="text-3xl font-black tracking-tight mb-3">API Documentation</h1>
+              <p class="text-gray-300">Complete guide for integrating with Haki CDN API programmatically.</p>
+            </div>
+
+            <!-- Base URL -->
+            <div class="bg-gray-900/50 rounded-2xl border border-gray-800 p-6">
+              <h2 class="text-xl font-bold mb-3">Base URL</h2>
+              <div class="code-block">
+                <code>https://cdn-haki.zone.id</code>
+              </div>
+            </div>
+
+            <!-- Upload File -->
+            <div class="bg-gray-900/50 rounded-2xl border border-gray-800 p-6">
+              <h2 class="text-xl font-bold mb-3">Upload File</h2>
+              <div class="space-y-4">
+                <div>
+                  <h3 class="font-semibold mb-2">Endpoint</h3>
+                  <div class="code-block">
+                    <code><span class="code-keyword">POST</span> /upload</code>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 class="font-semibold mb-2">Request</h3>
+                  <p class="text-sm text-gray-400 mb-2">Content-Type: multipart/form-data</p>
+                  <div class="code-block">
+                    <code>curl -X POST https://cdn-haki.zone.id/upload \<br>  -F <span class="code-string">"file=@yourfile.jpg"</span></code>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 class="font-semibold mb-2">Response</h3>
+                  <div class="code-block">
+                    <code class="code-json">{<br>  <span class="code-string">"url"</span>: <span class="code-string">"https://cdn-haki.zone.id/files/{unique_id}"</span>,<br>  <span class="code-string">"fileSize"</span>: <span class="code-number">12345</span><br>}</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Retrieve File -->
+            <div class="bg-gray-900/50 rounded-2xl border border-gray-800 p-6">
+              <h2 class="text-xl font-bold mb-3">Retrieve File</h2>
+              <div class="space-y-4">
+                <div>
+                  <h3 class="font-semibold mb-2">Endpoint</h3>
+                  <div class="code-block">
+                    <code><span class="code-keyword">GET</span> /files/:id</code>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 class="font-semibold mb-2">Example</h3>
+                  <div class="code-block">
+                    <code>GET https://cdn-haki.zone.id/files/abc123.jpg</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Node.js/Bun Example -->
+            <div class="bg-gray-900/50 rounded-2xl border border-gray-800 p-6">
+              <h2 class="text-xl font-bold mb-3">Node.js / Bun Integration</h2>
+              <div class="space-y-4">
+                <div>
+                  <h3 class="font-semibold mb-2">Upload Example</h3>
+                  <div class="code-block">
+                    <code><span class="code-comment">// Node.js or Bun</span><br><span class="code-keyword">import</span> fetch <span class="code-keyword">from</span> <span class="code-string">'node-fetch'</span>;<br><br><span class="code-keyword">async function</span> uploadFile(filePath) {<br>  <span class="code-keyword">const</span> fs = <span class="code-keyword">require</span>(<span class="code-string">'fs'</span>);<br>  <span class="code-keyword">const</span> FormData = <span class="code-keyword">require</span>(<span class="code-string">'form-data'</span>);<br>  <span class="code-keyword">const</span> form = <span class="code-keyword">new</span> FormData();<br>  form.append(<span class="code-string">'file'</span>, fs.createReadStream(filePath));<br><br>  <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> fetch(<span class="code-string">'https://cdn-haki.zone.id/upload'</span>, {<br>    method: <span class="code-string">'POST'</span>,<br>    body: form,<br>    headers: form.getHeaders()<br>  });<br><br>  <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> response.json();<br>  console.log(result);<br>}<br><br>uploadFile(<span class="code-string">'./my-local-file.jpg'</span>);</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Error Handling -->
+            <div class="bg-gray-900/50 rounded-2xl border border-gray-800 p-6">
+              <h2 class="text-xl font-bold mb-3">Error Handling</h2>
+              <div class="space-y-3">
+                <div><strong>401 Unauthorized:</strong> <span class="text-gray-400">No file provided in upload</span></div>
+                <div><strong>404 Not Found:</strong> <span class="text-gray-400">File with given ID does not exist</span></div>
+                <div><strong>500 Internal Server Error:</strong> <span class="text-gray-400">Upload failed</span></div>
+              </div>
+              <div class="mt-4">
+                <h3 class="font-semibold mb-2">Error Response Format</h3>
+                <div class="code-block">
+                  <code class="code-json">{ <span class="code-string">"error"</span>: <span class="code-string">"no file uploaded"</span> }</code>
+                </div>
+              </div>
+            </div>
+
+            <!-- Credits -->
+            <div class="bg-gray-900/50 rounded-2xl border border-gray-800 p-6 text-center">
+              <h2 class="text-xl font-bold mb-3">Credits & Support</h2>
+              <p class="text-gray-300 mb-4">Made with 💚 by <span class="font-semibold text-brand-400">Haki</span></p>
+              <div class="flex items-center justify-center gap-4">
+                <a href="https://wa.me/2349112171078" target="_blank" class="inline-flex items-center gap-2 rounded-xl border border-gray-800 px-4 py-2 text-sm hover:bg-gray-900 transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.52 3.48A11.8 11.8 0 0012.07 0C5.47 0 .1 5.36.1 11.96c0 2.11.55 4.17 1.6 6l-1.7 6.04 6.2-1.62a11.9 11.9 0 005.86 1.54h.01c6.6 0 11.96-5.37 11.96-11.96a11.9 11.9 0 00-3.41-8.48z"/>
+                  </svg>
+                  WhatsApp
+                </a>
+                <a href="https://github.com/hakisolos/cdn" target="_blank" class="inline-flex items-center gap-2 rounded-xl border border-gray-800 px-4 py-2 text-sm hover:bg-gray-900 transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.6-4.04-1.6-.54-1.36-1.34-1.72-1.34-1.72-1.1-.74.08-.73.08-.73 1.2.08 1.83 1.24 1.83 1.24 1.08 1.85 2.83 1.32 3.52 1.01.1-.78.42-1.32.75-1.62-2.67-.3-5.47-1.34-5.47-5.97 0-1.32.47-2.4 1.24-3.24-.12-.3-.54-1.52.12-3.16 0 0 1-.32 3.3 1.23a11.4 11.4 0 016 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.64.24 2.86.12 3.16.77.84 1.24 1.92 1.24 3.24 0 4.64-2.8 5.66-5.48 5.96.44.38.82 1.1.82 2.22v3.28c0 .32.22.69.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
+                  </svg>
+                  GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
 
-    <!-- Footer -->
-<footer class="mt-auto border-t border-gray-200 dark:border-gray-800">
-  <div
-    class="mx-auto max-w-6xl px-4 sm:px-6 py-6 text-sm text-gray-600 dark:text-gray-400 flex flex-wrap items-center justify-between gap-3"
-  >
-    <div>
-      Built with ❤ By <span class="font-semibold">Haki</span>. Powered by reliable infrastructure.
-    </div>
-    <div class="flex items-center gap-5">
-      <!-- About Dev -->
-      <a class="flex items-center gap-1 hover:underline" href="https://www.hakidev.my.id" target="_blank">
-        <!-- User icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M5.121 17.804A9.969 9.969 0 0112 15c2.485 0 4.74.908 6.879 2.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-        About Dev
-      </a>
-
-      <!-- WhatsApp -->
-      <a class="flex items-center gap-1 hover:underline" href="https://wa.me/2349112171078" target="_blank">
-        <!-- WhatsApp icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M20.52 3.48A11.8 11.8 0 0012.07 0C5.47 0 .1 5.36.1 11.96c0 2.11.55 4.17 1.6 6l-1.7 6.04 6.2-1.62a11.9 11.9 0 005.86 1.54h.01c6.6 0 11.96-5.37 11.96-11.96a11.9 11.9 0 00-3.41-8.48zM12.07 21.5c-1.87 0-3.69-.49-5.29-1.42l-.38-.23-3.68.96.98-3.59-.25-.37a9.9 9.9 0 01-1.53-5.09c0-5.46 4.45-9.9 9.92-9.9 2.65 0 5.14 1.03 7.02 2.9a9.85 9.85 0 012.91 7c0 5.47-4.45 9.92-9.92 9.92zm5.46-7.39c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.67.15s-.77.97-.94 1.17c-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.48-.88-.78-1.48-1.73-1.65-2.03-.17-.3-.02-.47.13-.62.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.21-.24-.58-.5-.5-.67-.5h-.57c-.2 0-.52.07-.8.37s-1.05 1.03-1.05 2.5 1.08 2.9 1.23 3.1c.15.2 2.14 3.27 5.2 4.59.73.31 1.3.5 1.75.64.74.23 1.42.2 1.95.12.6-.09 1.77-.72 2.02-1.41.25-.7.25-1.3.18-1.42-.07-.12-.27-.2-.57-.35z" />
-        </svg>
-        WhatsApp
-      </a>
-
-      <!-- Github -->
-      <a class="flex items-center gap-1 hover:underline" href="https://github.com/hakisolos" target="_blank">
-        <!-- GitHub icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-          <path fill-rule="evenodd" clip-rule="evenodd"
-            d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.6-4.04-1.6-.54-1.36-1.34-1.72-1.34-1.72-1.1-.74.08-.73.08-.73 1.2.08 1.83 1.24 1.83 1.24 1.08 1.85 2.83 1.32 3.52 1.01.1-.78.42-1.32.75-1.62-2.67-.3-5.47-1.34-5.47-5.97 0-1.32.47-2.4 1.24-3.24-.12-.3-.54-1.52.12-3.16 0 0 1-.32 3.3 1.23a11.4 11.4 0 016 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.64.24 2.86.12 3.16.77.84 1.24 1.92 1.24 3.24 0 4.64-2.8 5.66-5.48 5.96.44.38.82 1.1.82 2.22v3.28c0 .32.22.69.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
-        </svg>
-        GitHub
-      </a>
-    </div>
+    <!-- Footer (only show on home page) -->
+    <footer id="footer" class="mt-auto border-t border-gray-800">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 py-6 text-sm text-gray-400 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          Built with ❤ By <span class="font-semibold">Haki</span>. Powered by reliable infrastructure.
+        </div>
+        <div class="flex items-center gap-5">
+          <a class="flex items-center gap-1 hover:underline" href="https://www.hakidev.my.id" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9.969 9.969 0 0112 15c2.485 0 4.74.908 6.879 2.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            About Dev
+          </a>
+          <a class="flex items-center gap-1 hover:underline" href="https://wa.me/2349112171078" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.52 3.48A11.8 11.8 0 0012.07 0C5.47 0 .1 5.36.1 11.96c0 2.11.55 4.17 1.6 6l-1.7 6.04 6.2-1.62a11.9 11.9 0 005.86 1.54h.01c6.6 0 11.96-5.37 11.96-11.96a11.9 11.9 0 00-3.41-8.48zM12.07 21.5c-1.87 0-3.69-.49-5.29-1.42l-.38-.23-3.68.96.98-3.59-.25-.37a9.9 9.9 0 01-1.53-5.09c0-5.46 4.45-9.9 9.92-9.9 2.65 0 5.14 1.03 7.02 2.9a9.85 9.85 0 012.91 7c0 5.47-4.45 9.92-9.92 9.92zm5.46-7.39c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.67.15s-.77.97-.94 1.17c-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.48-.88-.78-1.48-1.73-1.65-2.03-.17-.3-.02-.47.13-.62.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.21-.24-.58-.5-.5-.67-.5h-.57c-.2 0-.52.07-.8.37s-1.05 1.03-1.05 2.5 1.08 2.9 1.23 3.1c.15.2 2.14 3.27 5.2 4.59.73.31 1.3.5 1.75.64.74.23 1.42.2 1.95.12.6-.09 1.77-.72 2.02-1.41.25-.7.25-1.3.18-1.42-.07-.12-.27-.2-.57-.35z" />
+            </svg>
+            WhatsApp
+          </a>
+          <a class="flex items-center gap-1 hover:underline" href="https://github.com/hakisolos" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.6-4.04-1.6-.54-1.36-1.34-1.72-1.34-1.72-1.1-.74.08-.73.08-.73 1.2.08 1.83 1.24 1.83 1.24 1.08 1.85 2.83 1.32 3.52 1.01.1-.78.42-1.32.75-1.62-2.67-.3-5.47-1.34-5.47-5.97 0-1.32.47-2.4 1.24-3.24-.12-.3-.54-1.52.12-3.16 0 0 1-.32 3.3 1.23a11.4 11.4 0 016 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.64.24 2.86.12 3.16.77.84 1.24 1.92 1.24 3.24 0 4.64-2.8 5.66-5.48 5.96.44.38.82 1.1.82 2.22v3.28c0 .32.22.69.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </footer>
   </div>
-</footer>
-
 
   <!-- Toast -->
   <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 hidden z-50">
-    <div class="rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-2 text-sm shadow-lg flex items-center gap-2">
+    <div class="rounded-2xl bg-white text-gray-900 px-4 py-2 text-sm shadow-lg flex items-center gap-2">
       <svg class="h-4 w-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>
       <span id="toastText">Copied!</span>
     </div>
   </div>
 
   <script>
-    // --- Theme handling (Fixed) ---
-    const themeToggle = document.getElementById('themeToggle');
-    const themeText = document.getElementById('themeText');
-    const sunIcon = document.getElementById('sunIcon');
-    const moonIcon = document.getElementById('moonIcon');
+    // --- Page Navigation ---
+    const homePage = document.getElementById('homePage');
+    const docsPage = document.getElementById('docsPage');
+    const footer = document.getElementById('footer');
+    const docsBtn = document.getElementById('docsBtn');
+    const backBtn = document.getElementById('backBtn');
 
-    function setTheme(mode) {
-      if (mode === 'dark') {
-        document.documentElement.classList.add('dark');
-        themeText.textContent = 'Light';
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
-      } else {
-        document.documentElement.classList.remove('dark');
-        themeText.textContent = 'Dark';
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
-      }
-      localStorage.setItem('theme', mode);
+    function showDocs() {
+      homePage.classList.add('hidden');
+      docsPage.classList.remove('hidden');
+      footer.classList.add('hidden');
     }
 
-    // Initialize theme
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
-    setTheme(initialTheme);
+    function showHome() {
+      docsPage.classList.add('hidden');
+      homePage.classList.remove('hidden');
+      footer.classList.remove('hidden');
+    }
 
-    themeToggle.addEventListener('click', () => {
-      const isDark = document.documentElement.classList.contains('dark');
-      setTheme(isDark ? 'light' : 'dark');
-    });
+    docsBtn.addEventListener('click', showDocs);
+    backBtn.addEventListener('click', showHome);
 
     // --- File Upload Logic ---
     const dropzone = document.getElementById('dropzone');
@@ -190,13 +313,13 @@
     ['dragenter', 'dragover'].forEach(evt => dropzone.addEventListener(evt, (e) => {
       e.preventDefault();
       e.stopPropagation();
-      dropzone.classList.add('ring-2', 'ring-brand-400', 'border-brand-400', 'dark:ring-brand-500', 'dark:border-brand-500');
+      dropzone.classList.add('ring-2', 'ring-brand-500', 'border-brand-500');
     }));
 
     ['dragleave', 'drop'].forEach(evt => dropzone.addEventListener(evt, (e) => {
       e.preventDefault();
       e.stopPropagation();
-      dropzone.classList.remove('ring-2', 'ring-brand-400', 'border-brand-400', 'dark:ring-brand-500', 'dark:border-brand-500');
+      dropzone.classList.remove('ring-2', 'ring-brand-500', 'border-brand-500');
     }));
 
     dropzone.addEventListener('drop', (e) => handleFiles(e.dataTransfer.files));
@@ -242,24 +365,24 @@
     function addUpload(file) {
       const id = randomId(6);
       const row = document.createElement('div');
-      row.className = 'group rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-900/40 backdrop-blur px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3';
+      row.className = 'group rounded-2xl border border-gray-800 bg-gray-900/40 backdrop-blur px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3';
       row.id = `row-${id}`;
 
       row.innerHTML = `
         <div class='flex items-center gap-3 min-w-0'>
-          <div class='h-9 w-9 rounded-xl bg-gray-100 dark:bg-gray-800 grid place-items-center'>${iconFor(file.type)}</div>
+          <div class='h-9 w-9 rounded-xl bg-gray-800 grid place-items-center'>${iconFor(file.type)}</div>
           <div class='min-w-0'>
             <div class='font-medium truncate'>${file.name}</div>
             <div class='text-xs text-gray-500'>${file.type || 'application/octet-stream'} · ${fmtBytes(file.size)}</div>
           </div>
         </div>
         <div class='sm:ml-auto w-full sm:w-1/2'>
-          <div class='h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden'>
+          <div class='h-2 bg-gray-800 rounded-full overflow-hidden'>
             <div class='h-full bg-gradient-to-r from-brand-500 to-fuchsia-500 w-0' id='bar-${id}'></div>
           </div>
           <div class='mt-1.5 text-xs text-gray-500 flex items-center justify-between'>
             <span id='status-${id}'>Preparing upload...</span>
-            <button id='cancel-${id}' class='text-xs px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900'>Cancel</button>
+            <button id='cancel-${id}' class='text-xs px-2 py-1 rounded-lg border border-gray-800 hover:bg-gray-900'>Cancel</button>
           </div>
         </div>
       `;
@@ -385,7 +508,7 @@
     function completeUpload(id, row, file, url) {
       row.innerHTML = `
         <div class='flex items-center gap-3 min-w-0'>
-          <div class='h-9 w-9 rounded-xl bg-green-100 dark:bg-green-900/30 grid place-items-center text-green-600 dark:text-green-400'>
+          <div class='h-9 w-9 rounded-xl bg-green-900/30 grid place-items-center text-green-400'>
             <svg class='h-4 w-4' viewBox='0 0 24 24'><path fill='currentColor' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/></svg>
           </div>
           <div class='min-w-0'>
@@ -395,10 +518,10 @@
         </div>
         <div class='sm:ml-auto w-full sm:w-1/2'>
           <div class='flex items-center gap-2'>
-            <input readonly value='${url}' class='flex-1 text-xs rounded-xl border border-gray-200 dark:border-gray-800 bg-transparent px-3 py-2 truncate'/>
-            <button class='copyBtn text-xs px-3 py-2 rounded-xl bg-gray-900 text-white dark:bg-white dark:text-gray-900 hover:opacity-90'>Copy</button>
-            <a href='${url}' target='_blank' class='text-xs px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900'>Open</a>
-            <button class='removeBtn text-xs px-3 py-2 rounded-xl border border-red-200 text-red-600 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-950/30'>Remove</button>
+            <input readonly value='${url}' class='flex-1 text-xs rounded-xl border border-gray-800 bg-transparent px-3 py-2 truncate'/>
+            <button class='copyBtn text-xs px-3 py-2 rounded-xl bg-white text-gray-900 hover:opacity-90'>Copy</button>
+            <a href='${url}' target='_blank' class='text-xs px-3 py-2 rounded-xl border border-gray-800 hover:bg-gray-900'>Open</a>
+            <button class='removeBtn text-xs px-3 py-2 rounded-xl border border-red-900/50 text-red-600 hover:bg-red-950/30'>Remove</button>
           </div>
           <div class='mt-1.5 text-[11px] text-gray-500'>File successfully uploaded and ready to share.</div>
         </div>
