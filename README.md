@@ -16,6 +16,7 @@ Welcome to the documentation for the CDN Haki API. This API allows you to upload
 - [Environment Requirements](#environment-requirements)
 - [Example Usage](#example-usage)
 - [Node.js / Bun Integration Example](#nodejs--bun-integration-example)
+- [How to Deploy Your Own Instance](#how-to-deploy-your-own-instance)
 - [Credits & Support](#credits--support)
 
 ---
@@ -251,6 +252,60 @@ const response = await fetch('https://cdn-haki.zone.id/upload', {
 const data = await response.json();
 console.log(data);
 ```
+
+---
+
+## How to Deploy Your Own Instance
+
+You can run CDN Haki on your own server, VPS, or cloud platform using either Node.js or Bun. Here’s how:
+
+### 1. Deploying on Vercel (Node.js)
+
+- **Step 1:** Fork or clone the repository.
+- **Step 2:** Add your environment variables in Vercel dashboard (`BOT_TOKEN`, `TEST_CHAT_ID`, `CHANNEL_ID`, `PORT`).
+- **Step 3:** Set up a `vercel.json` or use the default configuration.
+- **Step 4:** Deploy!
+
+> Note: Vercel may not support Bun natively yet, so use Node.js for Vercel.
+
+### 2. Deploying on Render
+
+- **Step 1:** Fork or clone the repository.
+- **Step 2:** Create a new web service on Render with your repo.
+- **Step 3:** Set the environment variables in the Render dashboard.
+- **Step 4:** Select Node.js or Bun as your environment and deploy.
+
+### 3. Deploying on VPS (Node.js/Bun)
+
+- **Step 1:** SSH into your VPS.
+- **Step 2:** Clone the repo:  
+  `git clone https://github.com/hakisolos/cdn.git`
+- **Step 3:** Install dependencies:
+  - Node.js: `npm install`
+  - Bun: `bun install`
+- **Step 4:** Set your environment variables (see above).
+- **Step 5:** Start the server:
+  - Node.js: `node index.js` or `npm start`
+  - Bun: `bun index.ts`
+
+### 4. Local .env Setup
+
+Create a `.env` file in the root of your project with the following contents:
+
+```env
+BOT_TOKEN=your-telegram-bot-token
+TEST_CHAT_ID=your-test-chat-id
+CHANNEL_ID=your-channel-id
+PORT=your-port
+```
+
+> **Note:** Keep your bot token secret!
+
+### 5. Bun vs Node
+
+- **Node.js:** Use `npm install` and `node index.js`
+- **Bun:** Use `bun install` and `bun index.ts`
+- The project supports both, but Bun is faster!
 
 ---
 
