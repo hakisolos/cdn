@@ -7,7 +7,7 @@ import path from 'path'
 const cdn = new Hono();
 const fileMap = new Map<string, string>();
 
-cdn.use('/static/*', serveStatic({ root: './public' }))
+cdn.use('/*', serveStatic({ root: './public' }))
 cdn.get('/', serveStatic({ path: './public/index.html' }))
 
 const uploadDir = path.join(process.cwd(), "uploads");
