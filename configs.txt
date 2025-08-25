@@ -1,0 +1,48 @@
+ sudo nano /etc/systemd/system/cdn.service
+
+
+[Unit]
+Description=CDN Server (Bun)
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/bun run /home/ubuntu/cdn/index.ts
+WorkingDirectory=/home/ubuntu/cdn
+Restart=always
+RestartSec=5
+User=ubuntu
+Environment=PORT=3001 NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
+
+
+sudo systemctl daemon-reload
+sudo systemctl start cdn
+
+ADDING DOMAIN
+sudo apt install nginx -y
+sudo nano /etc/nginx/sites-available/cdn
+
+server {
+    listen 80;
+    server_name cdn-haki.zone.id;
+
+    location / {
+        proxy_pass http://127.0.0.1:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+sudo ln -s /etc/nginx/sites-available/cdn /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+
+sudo apt install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d cdn-haki.zone.id
+
+DONEEEE
